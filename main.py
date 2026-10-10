@@ -29,9 +29,7 @@ def cli():
     console.print(BANNER)
 
 
-# ─────────────────────────────────────────────
 # CONFIG
-# ─────────────────────────────────────────────
 @cli.command()
 def config():
     """Configure API keys and translation options."""
@@ -39,9 +37,7 @@ def config():
     cfg.interactive_setup()
 
 
-# ─────────────────────────────────────────────
 # EXTRACT
-# ─────────────────────────────────────────────
 @cli.command()
 @click.option(
     "--engine",
@@ -74,9 +70,7 @@ def extract(engine, game_dir, output_dir):
     console.print("\nNext: edit the glossary, then run: python main.py translate")
 
 
-# ─────────────────────────────────────────────
 # TRANSLATE
-# ─────────────────────────────────────────────
 @cli.command()
 @click.option("--input-file",    default="output/extracted.json",  show_default=True)
 @click.option("--output-file",   default="output/translated.json", show_default=True)
@@ -173,9 +167,7 @@ def translate(input_file, output_file, glossary_file, preview, batch_size, resum
     console.print("\nNext: python main.py rebuild --engine <mv|vxa> --game-dir <path>")
 
 
-# ─────────────────────────────────────────────
 # REBUILD
-# ─────────────────────────────────────────────
 @cli.command()
 @click.option("--engine",          type=click.Choice(["mv", "mz", "vxa"], case_sensitive=False), required=True)
 @click.option("--game-dir",        required=True, type=click.Path(exists=True, file_okay=False, dir_okay=True))
@@ -209,9 +201,7 @@ def rebuild(engine, game_dir, translated_file, no_backup):
     console.print("Launch the game and check.")
 
 
-# ─────────────────────────────────────────────
 # GLOSSARY
-# ─────────────────────────────────────────────
 @cli.command()
 @click.option("--file", "glossary_file", default="output/glossary.json", show_default=True)
 def glossary(glossary_file):
