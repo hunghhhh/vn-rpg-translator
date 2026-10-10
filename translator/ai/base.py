@@ -5,7 +5,7 @@ Base AI client interface and shared prompt builder.
 from abc import ABC, abstractmethod
 
 
-# ─── Prompt Builder ────────────────────────────────────────────────────────────
+# Prompt Builder
 
 PRONOUN_INSTRUCTIONS = {
     "neutral": (
@@ -60,7 +60,7 @@ def build_system_prompt(glossary: dict, pronoun_mode: str) -> str:
     )
 
 
-# ─── Base Class ────────────────────────────────────────────────────────────────
+# Base Class 
 
 class BaseAIClient(ABC):
     """Shared interface for all AI provider clients."""
