@@ -1,0 +1,5 @@
+google-generativeai>=0.8.0
+requests>=2.31.0
+rich>=13.7.0
+click>=8.1.7
+marshalparser>=0.4.0
