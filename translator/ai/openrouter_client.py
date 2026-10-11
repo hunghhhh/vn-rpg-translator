@@ -15,9 +15,10 @@ DEFAULT_MODEL = "deepseek/deepseek-chat"
 
 
 class OpenRouterClient(BaseAIClient):
-    def __init__(self, api_key: str, model: str = DEFAULT_MODEL):
+    def __init__(self, api_key: str, model: str = DEFAULT_MODEL, api_url: str = OPENROUTER_API_URL):
         self.api_key = api_key
         self.model = model
+        self.api_url = api_url or OPENROUTER_API_URL
         self.headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
@@ -53,7 +54,7 @@ class OpenRouterClient(BaseAIClient):
         for attempt in range(3):
             try:
                 resp = requests.post(
-                    OPENROUTER_API_URL,
+                    self.api_url,
                     headers=self.headers,
                     json=payload,
                     timeout=120,

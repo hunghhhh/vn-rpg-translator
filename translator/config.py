@@ -11,10 +11,13 @@ from rich.table import Table
 console = Console()
 
 DEFAULT_CONFIG = {
-    "api_provider":       "",                       # "gemini" or "openrouter"
+    "api_provider":       "",                       # "gemini", "openrouter", or "custom"
     "gemini_api_key":     "",
+    "gemini_model":       "gemini-2.5-flash",
     "openrouter_api_key": "",
     "openrouter_model":   "deepseek/deepseek-chat",
+    "custom_api_url":     "",                       # e.g. http://localhost:11434/v1/chat/completions for Ollama
+    "custom_api_key":     "ollama",
     "batch_size":         20,
     "pronoun_mode":       "neutral",                # neutral | formal | casual
     "source_lang":        "ja",
@@ -57,7 +60,7 @@ class ConfigManager:
 
         provider = Prompt.ask(
             "API provider",
-            choices=["gemini", "openrouter"],
+            choices=["gemini", "openrouter", "custom"],
             default=cfg.get("api_provider") or "gemini",
         )
         cfg["api_provider"] = provider
@@ -70,7 +73,12 @@ class ConfigManager:
             )
             if key:
                 cfg["gemini_api_key"] = key
-        else:
+            model = Prompt.ask(
+                "Gemini model",
+                default=cfg.get("gemini_model", "gemini-2.5-flash"),
+            )
+            cfg["gemini_model"] = model
+        elif provider == "openrouter":
             key = Prompt.ask(
                 "OpenRouter API Key (press Enter to keep current)",
                 default=cfg.get("openrouter_api_key", ""),
@@ -78,11 +86,34 @@ class ConfigManager:
             )
             if key:
                 cfg["openrouter_api_key"] = key
+            console.print("\nPopular OpenRouter models:")
+            console.print("  - anthropic/claude-3-opus")
+            console.print("  - anthropic/claude-3.5-sonnet")
+            console.print("  - meta-llama/llama-3.3-70b-instruct")
+            console.print("  - deepseek/deepseek-chat")
+            console.print("  - openai/gpt-4o")
             model = Prompt.ask(
-                "OpenRouter model",
+                "Model ID",
                 default=cfg.get("openrouter_model", "deepseek/deepseek-chat"),
             )
             cfg["openrouter_model"] = model
+        else:
+            console.print("\nCustom / Local OpenAI-compatible API (Ollama, LM Studio, etc.)")
+            url = Prompt.ask(
+                "API Endpoint URL",
+                default=cfg.get("custom_api_url", "http://localhost:11434/v1/chat/completions"),
+            )
+            cfg["custom_api_url"] = url
+            model = Prompt.ask(
+                "Model name",
+                default=cfg.get("openrouter_model", "llama3.3"),
+            )
+            cfg["openrouter_model"] = model
+            key = Prompt.ask(
+                "API Key (or press Enter for default)",
+                default=cfg.get("custom_api_key", "ollama"),
+            )
+            cfg["custom_api_key"] = key
 
         batch = Prompt.ask(
             "Batch size - strings per API call (larger = cheaper but more fragile)",

@@ -7,21 +7,23 @@ from translator.ai.openrouter_client import OpenRouterClient
 
 
 def get_ai_client(settings: dict) -> BaseAIClient:
-    """Factory: trả về AI client phù hợp theo config."""
+    """Factory: returns matching AI client for settings."""
     provider = settings.get("api_provider", "gemini").lower()
 
     if provider == "gemini":
         key = settings.get("gemini_api_key", "")
+        model = settings.get("gemini_model", "gemini-2.5-flash")
         if not key:
-            raise ValueError("Chưa có Gemini API Key. Chạy: python main.py config")
-        return GeminiClient(api_key=key)
+            raise ValueError("No Gemini API key found. Run: python main.py config")
+        return GeminiClient(api_key=key, model=model)
 
-    elif provider == "openrouter":
-        key = settings.get("openrouter_api_key", "")
+    elif provider in ("openrouter", "local", "custom"):
+        key = settings.get("openrouter_api_key", "") or settings.get("custom_api_key", "dummy-key")
         model = settings.get("openrouter_model", "deepseek/deepseek-chat")
-        if not key:
-            raise ValueError("Chưa có OpenRouter API Key. Chạy: python main.py config")
-        return OpenRouterClient(api_key=key, model=model)
+        api_url = settings.get("custom_api_url", "")
+        if provider == "openrouter" and not key:
+            raise ValueError("No OpenRouter API key found. Run: python main.py config")
+        return OpenRouterClient(api_key=key, model=model, api_url=api_url)
 
     else:
-        raise ValueError(f"Provider không hỗ trợ: {provider}. Dùng 'gemini' hoặc 'openrouter'.")
+        raise ValueError(f"Unsupported provider: {provider}. Use 'gemini', 'openrouter', or 'custom'.")
