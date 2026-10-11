@@ -13,7 +13,7 @@ import google.generativeai as genai
 from translator.ai.base import BaseAIClient, build_system_prompt
 
 
-DEFAULT_MODEL = "gemini-2.0-flash"
+DEFAULT_MODEL = "gemini-2.5-flash"
 
 
 class GeminiClient(BaseAIClient):
