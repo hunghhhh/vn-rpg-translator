@@ -7,7 +7,7 @@ import json
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from rich.prompt import Prompt, Confirm
+from rich.prompt import Prompt
 
 console = Console()
 
@@ -70,8 +70,7 @@ class PreviewEditor:
                 console.print(f"Saved {len(self.translated)} translations.")
                 return self.translated
             elif choice == "q":
-                if Confirm.ask("Quit without saving edits?"):
-                    return self.translated
+                return self.translated
 
         return self.translated
 
