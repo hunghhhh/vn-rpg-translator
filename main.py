@@ -109,10 +109,10 @@ def translate(input_file, output_file, glossary_file, preview, batch_size, resum
         extracted = json.load(f)
 
     translated = {}
-    if resume and os.path.exists(output_file):
+    if os.path.exists(output_file):
         with open(output_file, "r", encoding="utf-8") as f:
             translated = json.load(f)
-        console.print(f"Resume: {len(translated)} already translated, skipping...")
+        console.print(f"Loaded {len(translated)} existing translations.")
 
     glossary = GlossaryManager(glossary_file)
     glossary_data = glossary.load()
@@ -170,7 +170,8 @@ def translate(input_file, output_file, glossary_file, preview, batch_size, resum
     console.print(f"\nDone. {len(translated)}/{len(extracted)} strings translated.")
 
     if preview:
-        editor = PreviewEditor(extracted, translated)
+        preview_items = {k: extracted[k] for k in translated if k in extracted}
+        editor = PreviewEditor(preview_items, translated)
         translated = editor.run()
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(translated, f, ensure_ascii=False, indent=2)
