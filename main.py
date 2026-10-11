@@ -5,6 +5,12 @@ Translates RPG Maker games from Japanese to Vietnamese using AI.
 """
 
 import sys
+
+if sys.stdout.encoding != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+if sys.stderr.encoding != "utf-8":
+    sys.stderr.reconfigure(encoding="utf-8")
+
 import click
 from rich.console import Console
 
