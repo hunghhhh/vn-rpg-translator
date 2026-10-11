@@ -6,6 +6,9 @@ Default model: gemini-2.0-flash (fast and cheap for bulk translation).
 import json
 import time
 import re
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning)
 import google.generativeai as genai
 from translator.ai.base import BaseAIClient, build_system_prompt
 
