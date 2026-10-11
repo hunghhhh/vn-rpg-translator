@@ -85,7 +85,8 @@ def extract(engine, game_dir, output_dir):
 @click.option("--batch-size",    default=None, type=int,            help="Strings per API call (overrides config)")
 @click.option("--resume",        is_flag=True, default=False,       help="Skip already-translated strings")
 @click.option("--limit",         default=None, type=int,            help="Limit number of strings to translate")
-def translate(input_file, output_file, glossary_file, preview, batch_size, resume, limit):
+@click.option("--filter", "filter_key", default=None, help="Filter strings by key prefix (e.g. Map081, Skills)")
+def translate(input_file, output_file, glossary_file, preview, batch_size, resume, limit, filter_key):
     """Translate extracted Japanese strings to Vietnamese using AI."""
     console.rule("STEP 2 -- TRANSLATE")
 
@@ -122,6 +123,8 @@ def translate(input_file, output_file, glossary_file, preview, batch_size, resum
     effective_batch = batch_size or settings.get("batch_size", 20)
 
     to_translate = {k: v for k, v in extracted.items() if k not in translated}
+    if filter_key:
+        to_translate = {k: v for k, v in to_translate.items() if filter_key.lower() in k.lower()}
     if limit is not None and limit > 0:
         to_translate = dict(list(to_translate.items())[:limit])
     total = len(to_translate)
