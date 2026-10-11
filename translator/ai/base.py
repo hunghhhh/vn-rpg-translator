@@ -26,7 +26,7 @@ SYSTEM_PROMPT_TEMPLATE = """You are a professional Japanese to Vietnamese game t
 Your task: translate text strings from a Japanese RPG game into Vietnamese.
 
 STRICT RULES:
-1. Preserve ALL control codes exactly as-is: \\n, \\c[N], \\v[N], \\i[N], \\s[N], <br>, #{} and any special tags.
+1. Preserve ALL control codes exactly as-is: \\n, \\c[N], \\v[N], \\i[N], \\s[N], <br>, #{{}} and any special tags.
 2. Do NOT translate names/locations that appear in the glossary below - use the provided Vietnamese equivalent.
 3. {pronoun_instruction}
 4. Keep translations concise - games have limited display space.
